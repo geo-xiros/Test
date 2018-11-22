@@ -10,6 +10,9 @@ namespace Test
         static void Main(string[] args)
         {
             Database db = new Database();
+
+            Console.WriteLine(db.GetUser("admin").HasAccessTo(Responsibilities.AddUser));
+
             Console.ReadKey();
         }
     }
@@ -34,6 +37,12 @@ namespace Test
             }
 
         }
+
+        public User GetUser(string username)
+        {
+            return _users[username];
+        }
+
         public bool Login(string username, string password)
         {
             return (_users.ContainsKey(username) &&
@@ -41,10 +50,10 @@ namespace Test
         }
 
     }
-    public enum Responsibilities { ViewData, EditData, DeleteData };
+    public enum Responsibilities { AddUser, ViewUser, EditUser, DeleteUser, AddRoleToUser, ViewData, EditData, DeleteData };
     class Role
     {
-        private Responsibilities[] _responsibilities;
+        protected Responsibilities[] _responsibilities;
         protected Role(Responsibilities[] responsibilities)
         {
             _responsibilities = responsibilities;
@@ -62,46 +71,62 @@ namespace Test
     {
         public ViewRole() : base(new Responsibilities[] { Responsibilities.ViewData }) { }
     }
-    class ViewEditRole : Role
+    class ViewEditRole : ViewRole
     {
-        public ViewEditRole() : base(new Responsibilities[] { Responsibilities.ViewData, Responsibilities.EditData }) { }
+        public ViewEditRole()
+            : base()
+        {
+            _responsibilities = _responsibilities.Concat(new Responsibilities[] { Responsibilities.EditData }).ToArray();
+        }
     }
-    class ViewEditDeleteRole : Role
+    class ViewEditDeleteRole : ViewEditRole
     {
-        public ViewEditDeleteRole() : base(new Responsibilities[] { Responsibilities.ViewData, Responsibilities.EditData, Responsibilities.DeleteData }) { }
+        public ViewEditDeleteRole()
+            : base()
+        {
+            _responsibilities = _responsibilities.Concat(new Responsibilities[] { Responsibilities.DeleteData }).ToArray();
+        }
+
+    }
+    class AdminRole : ViewEditDeleteRole
+    {
+        public AdminRole()
+            : base()
+        {
+            _responsibilities = _responsibilities.Concat(new Responsibilities[] 
+            { Responsibilities.AddUser, 
+              Responsibilities.ViewUser, 
+              Responsibilities.EditUser, 
+              Responsibilities.DeleteUser, 
+              Responsibilities.AddRoleToUser 
+            }).ToArray();
+        }
     }
 
     class User
     {
+        private readonly Role _role;
         private readonly int _nameId;
         public readonly string Username;
         private readonly string _password;
 
-        protected User(int nameId, string name, string password)
+        protected User(int nameId, string name, string password, Role role)
         {
             _nameId = nameId;
             Username = name;
             _password = password;
+            _role = role;
         }
         public bool IsPasswordCorrect(string password) { return _password == password; }
-        public virtual bool HasAccessTo(Responsibilities responsibility) { return true; }
+        public bool HasAccessTo(Responsibilities responsibility) { return _role[responsibility]; }
 
     }
     class SimpleUser : User
     {
-        private readonly Role _role;
-        public SimpleUser(int nameId, string name, string password, Role role)
-            : base(nameId, name, password)
-        {
-            _role = role;
-        }
-        public override bool HasAccessTo(Responsibilities responsibility)
-        {
-            return _role[responsibility];
-        }
+        public SimpleUser(int nameId, string name, string password, Role role) : base(nameId, name, password, role) { }
     }
-    class AdminUser : User
+    class AdminUser : SimpleUser
     {
-        public AdminUser() : base(0, "admin", "admin") { }
+        public AdminUser() : base(0, "admin", "admin", new AdminRole()) { }
     }
 }
