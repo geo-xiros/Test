@@ -3,3 +3,5 @@ Y:\Coding\Bootcamp\test\Test\bin\Debug\Test.pdb
 Y:\Coding\Bootcamp\test\Test\obj\x86\Debug\ResolveAssemblyReference.cache
 Y:\Coding\Bootcamp\test\Test\obj\x86\Debug\Test.exe
 Y:\Coding\Bootcamp\test\Test\obj\x86\Debug\Test.pdb
+C:\Users\George\Documents\cs-projects\test\Test\obj\x86\Debug\Test.exe
+C:\Users\George\Documents\cs-projects\test\Test\obj\x86\Debug\Test.pdb

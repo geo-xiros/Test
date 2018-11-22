@@ -43,8 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminRole.cs" />
+    <Compile Include="AdminUser.cs" />
+    <Compile Include="Database.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.cs" />
+    <Compile Include="SimpleUser.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="ViewEditDeleteRole.cs" />
+    <Compile Include="ViewEditRole.cs" />
+    <Compile Include="ViewRole.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
