@@ -17,12 +17,12 @@ namespace Test
             _users.Add("nick", new SimpleUser(2, "nick", "1234", new ViewEditRole()));
             _users.Add("john", new SimpleUser(3, "john", "1234", new ViewEditDeleteRole()));
 
-            foreach (var un in _users)
+            foreach (var user in _users.Values)
             {
-                Console.WriteLine(un.Value.Username);
-                Console.WriteLine(Responsibilities.ViewData + " " + un.Value.HasAccessTo(Responsibilities.ViewData));
-                Console.WriteLine(Responsibilities.EditData + " " + un.Value.HasAccessTo(Responsibilities.EditData));
-                Console.WriteLine(Responsibilities.DeleteData + " " + un.Value.HasAccessTo(Responsibilities.DeleteData));
+                Console.WriteLine(user.Username);
+                Console.WriteLine(Responsibilities.ViewData + " " + user.HasAccessTo(Responsibilities.ViewData));
+                Console.WriteLine(Responsibilities.EditData + " " + user.HasAccessTo(Responsibilities.EditData));
+                Console.WriteLine(Responsibilities.DeleteData + " " + user.HasAccessTo(Responsibilities.DeleteData));
             }
 
         }
